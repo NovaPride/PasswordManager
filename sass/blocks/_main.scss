@@ -1,0 +1,35 @@
+.main{
+  
+  .wrapper{
+    padding-top: 3rem;
+    display: grid;
+    grid-template: auto / repeat(auto-fill, 24rem);
+    justify-content: center;
+    justify-items: center;
+    align-items: stretch;
+    gap: 3rem;
+    &_card{
+      width: 24rem;
+      height: 24rem;
+      background-color:aqua;
+      //border: 0.2rem solid black;
+      border-radius: 2.5rem;
+      transition: 0.5s all;
+      filter: brightness(.8) saturate(69%);
+      &:hover{
+        filter: brightness(1);
+        transform: scale(1.05);
+        
+      }
+      &_img{
+        position: absolute;
+        width: 69%;
+        height: 69%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+  
+}
