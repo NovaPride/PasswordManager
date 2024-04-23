@@ -65,15 +65,10 @@ document.addEventListener("DOMContentLoaded", e => {
   function fCardDefault() {
     this.style.transform = ``;
   }
-  function fCardCopy(pass){
-
-  }
-
 
   function renderCards(obj, imgPath){
     let i = 0;
     for (const [key, {svg, imgSrc, local, color, password} = e] of Object.entries(obj)) {
-
       const newCard = document.createElement("div");
       newCard.setAttribute("data-card", i++);
       newCard.classList.add("wrapper_card");
@@ -84,7 +79,8 @@ document.addEventListener("DOMContentLoaded", e => {
         if (password) {
           navigator.clipboard.writeText(password)
             .then(() => {
-              //console.log("Copied!")//сюда интеректвность, после копирования
+              const audio = new Audio("./src/sounds/copysound.mp3");
+              audio.play();
             })
             .catch(err => {
               //console.log('Something went wrong', err);//сюда можно ошибку
@@ -97,49 +93,10 @@ document.addEventListener("DOMContentLoaded", e => {
   }
   
   const localImageStartPath = "./src/icons/";
- // const passwords = [];//может пойти по пизде наверное
+
   fetch('http://localhost:3000/passwords')
     .then(data => data.json())
-    .then(db => 
-      renderCards(db, localImageStartPath)
-      //for(const [key, {password} = e] of Object.entries(db)){passwords.push(password)}//может пойти по пизде наверное
-    );
+    .then(db => renderCards(db, localImageStartPath));
 
-  // function ifCardGetCard(target){
-  //   if (target.dataset.cardFrontImg == '') {
-  //     return target.parentElement;
-  //   } else if (target.dataset.cardFront  == '') {
-  //     return target;
-  //   }
-  // }
-
-  wrapper.addEventListener("click", ({target} = e) => {
-    let card = ifCardGetCard(target);
-    if (card) {
-      const cardID = card.parentElement.dataset.card;
-      const password = passwords[cardID];//может пойти по пизде наверное
-      if (password) {
-        navigator.clipboard.writeText(password)
-          .then(() => {
-            //console.log("Copied!")//сюда интеректвность, после копирования
-          })
-          .catch(err => {
-            //console.log('Something went wrong', err);//сюда можно ошибку
-          })
-      }
-    }
-  })
-
-  // wrapper.addEventListener("mousemove", e => {
-  //   const allCards = e.currentTarget.querySelectorAll("[data-card]");
-  //   allCards.forEach(e => {
-  //     e.style.transform = ``;
-  //   });
-  //   let card = ifCardGetCard(e.target);
-  //   if (card) {
-  //     card.parentElement.style.transform = `scale(1.1) perspective(1000px) rotatey(${(e.offsetX - card.parentElement.offsetWidth / 2) / 6}deg) rotatex(${((e.offsetY - card.parentElement.offsetHeight / 2) / 6) * -1}deg)`;
-  //   }   
-  // })
-  
 });
 
