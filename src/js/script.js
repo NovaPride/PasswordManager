@@ -33,62 +33,91 @@ document.addEventListener("DOMContentLoaded", e => {
   function setImage(path, svg, imgSrc, local, key){//эту хуйню зарефакторить надо
     if (imgSrc) {
       return `
-        <div class="wrapper_card_front">
-          <img src="${path}${imgSrc}" alt="${key}" class="wrapper_card_front_img">
+        <div data-card-front class="wrapper_card_front">
+          <img data-card-front-img src="${path}${imgSrc}" alt="${key}" class="wrapper_card_front_img">
         </div>
-        <div class="wrapper_card_back">
+        <div data-card-back class="wrapper_card_back">
         </div>
       `;
     } else if (svg && local === "true"){
       return  `
-        <div class="wrapper_card_front">
-          <img src="${path}${svg}" alt="${key}" class="wrapper_card_front_img">
+        <div data-card-front class="wrapper_card_front">
+          <img data-card-front-img src="${path}${svg}" alt="${key}" class="wrapper_card_front_img">
         </div>
-        <div class="wrapper_card_back"> 
+        <div data-card-back class="wrapper_card_back"> 
         </div>
       `;
     } else if (svg && local === "false"){
       return `
-        <div class="wrapper_card_front">
-          <div class="wrapper_card_front_svg"> ${svg} </div>
+        <div data-card-front class="wrapper_card_front">
+          <div data-card-front-svg class="wrapper_card_front_svg"> ${svg} </div>
         </div>
-        <div class="wrapper_card_back">
+        <div data-card-back class="wrapper_card_back">
         </div>
       `;
     }
   }
 
   //чужой
-  function fCardRotate(ev) {
-    this.style.transform = `scale(1.1) perspective(1000px) rotatey(${(ev.offsetX - this.offsetWidth / 2) / 6}deg) rotatex(${((ev.offsetY - this.offsetHeight / 2) / 6) * -1}deg)`;
+  function fCardRotate(e) {
+    this.style.transform = `scale(1.1) perspective(1000px) rotatey(${(e.offsetX - this.offsetWidth / 2) / 6}deg) rotatex(${((e.offsetY - this.offsetHeight / 2) / 6) * -1}deg)`;
   }
   function fCardDefault() {
     this.style.transform = ``;
   }
-
+  
   function renderCards(obj, imgPath){
+    let i = 0;
     for (const [key, {svg, imgSrc, local, color, password} = e] of Object.entries(obj)) {
 
       const newCard = document.createElement("div");
+      newCard.setAttribute("data-card", i++);
       newCard.classList.add("wrapper_card");
       newCard.style.cssText = `background:${color}`;
       
       newCard.innerHTML = setImage(imgPath, svg, imgSrc, local, key);
-      //переделать под фронт и бэк отдельно неаверное
-      newCard.addEventListener("mousemove", fCardRotate);//чужой
-      newCard.addEventListener("mouseout", fCardDefault);//чужой
-      //console.log(password)
+                                                          //переделать под фронт и бэк отдельно неаверное
+                                                          newCard.addEventListener("mousemove", fCardRotate);//чужой
+                                                          newCard.addEventListener("mouseout", fCardDefault);//чужой
+                                                         
       wrapper.appendChild(newCard);
     }
   }
   
   const localImageStartPath = "./src/icons/";
-
+  const passwords = [];//может пойти по пизде наверное
   fetch('http://localhost:3000/passwords')
-  .then(data => data.json())
-  .then(db => renderCards(db, localImageStartPath));
-  //renderCards(tipadatabazaprishla);
+    .then(data => data.json())
+    .then(db => {
+      renderCards(db, localImageStartPath)
+      for(const [key, {password} = e] of Object.entries(db)){passwords.push(password)}//может пойти по пизде наверное
+    });
 
+  function ifCardGetCard(target){
+    if (target.dataset.cardFrontImg == '') {
+      return target.parentElement;
+    } else if (target.dataset.cardFront  == '') {
+      return target;
+    }
+  }
+
+  wrapper.addEventListener("click", ({target} = e) => {
+    let card = ifCardGetCard(target);
+    if (card) {
+      const cardID = card.parentElement.dataset.card;
+      const password = passwords[cardID];//может пойти по пизде наверное
+      if (password) {
+        navigator.clipboard.writeText(password)
+          .then(() => {
+            //console.log("Copied!")//сюда интеректвность, после копирования
+          })
+          .catch(err => {
+            //console.log('Something went wrong', err);//сюда можно ошибку
+          })
+      }
+    }
+    
+  })
   
 });
 
