@@ -27,30 +27,14 @@ document.addEventListener("DOMContentLoaded", e => {
 
 
   //выносится
+  
   const wrapper = document.querySelector("[data-wrapper]");
-  const tipadb = `{
-    "telegram":{
-      "svg":"./icons/svg/telegram.svg",
-      "local":"true",
-      "color":"#3d92ba",
-      "password":"mypass"
-    },
-    "google":{
-      "svg":"./icons/svg/google.svg",
-      "local":"true",
-      "color":"#fefffe",
-      "password":"mypassgg"
-    }
-  }`;
-  const tipadatabazaprishla = JSON.parse(tipadb);
   
-  
-  
-  function setImage(svg, imgSrc, local, key){//эту хуйню зарефакторить надо
+  function setImage(path, svg, imgSrc, local, key){//эту хуйню зарефакторить надо
     if (imgSrc) {
       return `
         <div class="wrapper_card_front">
-          <img src="${imgSrc}" alt="${key}" class="wrapper_card_front_img">
+          <img src="${path}${imgSrc}" alt="${key}" class="wrapper_card_front_img">
         </div>
         <div class="wrapper_card_back">
         </div>
@@ -58,7 +42,7 @@ document.addEventListener("DOMContentLoaded", e => {
     } else if (svg && local === "true"){
       return  `
         <div class="wrapper_card_front">
-          <img src="${svg}" alt="${key}" class="wrapper_card_front_img">
+          <img src="${path}${svg}" alt="${key}" class="wrapper_card_front_img">
         </div>
         <div class="wrapper_card_back"> 
         </div>
@@ -82,14 +66,14 @@ document.addEventListener("DOMContentLoaded", e => {
     this.style.transform = ``;
   }
 
-  function renderCards(obj){
+  function renderCards(obj, imgPath){
     for (const [key, {svg, imgSrc, local, color, password} = e] of Object.entries(obj)) {
 
       const newCard = document.createElement("div");
       newCard.classList.add("wrapper_card");
       newCard.style.cssText = `background:${color}`;
       
-      newCard.innerHTML = setImage(svg, imgSrc, local, key);
+      newCard.innerHTML = setImage(imgPath, svg, imgSrc, local, key);
       //переделать под фронт и бэк отдельно неаверное
       newCard.addEventListener("mousemove", fCardRotate);//чужой
       newCard.addEventListener("mouseout", fCardDefault);//чужой
@@ -98,8 +82,13 @@ document.addEventListener("DOMContentLoaded", e => {
     }
   }
   
+  const localImageStartPath = "./src/icons/";
 
-  renderCards(tipadatabazaprishla);
+  fetch('http://localhost:3000/passwords')
+  .then(data => data.json())
+  .then(db => renderCards(db, localImageStartPath));
+  //renderCards(tipadatabazaprishla);
 
+  
 });
 

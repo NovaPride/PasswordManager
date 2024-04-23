@@ -1,0 +1,19 @@
+{
+  "passwords":{
+    "telegram":{
+      "svg":"svg/telegram.svg",
+      "local":"true",
+      "color":"#3d92ba",
+      "password":"mypass"
+    },
+    "google":{
+      "svg":"svg/google.svg",
+      "local":"true",
+      "color":"#fefffe",
+      "password":"mypassgg"
+    }
+  },
+  "post": [
+      
+  ]
+}
