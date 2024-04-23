@@ -1,6 +1,33 @@
 'use strict';
 document.addEventListener("DOMContentLoaded", e => {
+  //это остается тут
+  const root = document.querySelector("body");
   
+  //это выносится нахуй
+  const header = document.createElement("header");
+  header.innerHTML = `
+    <div class="container"></div>
+  `;
+
+  //это тоже
+  const main = document.createElement("section");
+  main.classList.add("main");
+  main.innerHTML = `
+    <div class="container">
+      <div data-wrapper class="wrapper">
+          
+      </div>
+    </div>
+  `;
+
+  //это остается тут
+  root.append(header);
+  root.append(main);
+
+
+
+  //выносится
+  const wrapper = document.querySelector("[data-wrapper]");
   const tipadb = `{
     "telegram":{
       "svg":"./icons/svg/telegram.svg",
@@ -17,10 +44,9 @@ document.addEventListener("DOMContentLoaded", e => {
   }`;
   const tipadatabazaprishla = JSON.parse(tipadb);
   
-
-  const wrapper = document.querySelector("[data-wrapper]");
-
-  function setImage(svg, imgSrc, local, key){
+  
+  
+  function setImage(svg, imgSrc, local, key){//эту хуйню зарефакторить надо
     if (imgSrc) {
       return `
         <div class="wrapper_card_front">
@@ -48,6 +74,14 @@ document.addEventListener("DOMContentLoaded", e => {
     }
   }
 
+  //чужой
+  function fCardRotate(ev) {
+    this.style.transform = `scale(1.1) perspective(1000px) rotatey(${(ev.offsetX - this.offsetWidth / 2) / 6}deg) rotatex(${((ev.offsetY - this.offsetHeight / 2) / 6) * -1}deg)`;
+  }
+  function fCardDefault() {
+    this.style.transform = ``;
+  }
+
   function renderCards(obj){
     for (const [key, {svg, imgSrc, local, color, password} = e] of Object.entries(obj)) {
 
@@ -63,13 +97,7 @@ document.addEventListener("DOMContentLoaded", e => {
       wrapper.appendChild(newCard);
     }
   }
-  //чужой
-  function fCardRotate(ev) {
-    this.style.transform = `scale(1.1) perspective(1000px) rotatey(${(ev.offsetX - this.offsetWidth / 2) / 6}deg) rotatex(${((ev.offsetY - this.offsetHeight / 2) / 6) * -1}deg)`;
-  }
-  function fCardDefault() {
-    this.style.transform = ``;
-  }
+  
 
   renderCards(tipadatabazaprishla);
 
