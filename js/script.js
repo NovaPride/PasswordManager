@@ -3,13 +3,15 @@ document.addEventListener("DOMContentLoaded", e => {
   
   const tipadb = `{
     "telegram":{
-      "imgSrc":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/2048px-Telegram_logo.svg.png",
-      "color":"#ff00ff",
+      "svg":"./icons/svg/telegram.svg",
+      "local":"true",
+      "color":"#3d92ba",
       "password":"mypass"
     },
     "google":{
-      "imgSrc":"https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png",
-      "color":"#ffff00",
+      "svg":"./icons/svg/google.svg",
+      "local":"true",
+      "color":"#fefffe",
       "password":"mypassgg"
     }
   }`;
@@ -18,18 +20,57 @@ document.addEventListener("DOMContentLoaded", e => {
 
   const wrapper = document.querySelector("[data-wrapper]");
 
+  function setImage(svg, imgSrc, local, key){
+    if (imgSrc) {
+      return `
+        <div class="wrapper_card_front">
+          <img src="${imgSrc}" alt="${key}" class="wrapper_card_front_img">
+        </div>
+        <div class="wrapper_card_back">
+        </div>
+      `;
+    } else if (svg && local === "true"){
+      return  `
+        <div class="wrapper_card_front">
+          <img src="${svg}" alt="${key}" class="wrapper_card_front_img">
+        </div>
+        <div class="wrapper_card_back"> 
+        </div>
+      `;
+    } else if (svg && local === "false"){
+      return `
+        <div class="wrapper_card_front">
+          <div class="wrapper_card_front_svg"> ${svg} </div>
+        </div>
+        <div class="wrapper_card_back">
+        </div>
+      `;
+    }
+  }
+
   function renderCards(obj){
-    for (const [key, e] of Object.entries(obj)) {
+    for (const [key, {svg, imgSrc, local, color, password} = e] of Object.entries(obj)) {
+
       const newCard = document.createElement("div");
       newCard.classList.add("wrapper_card");
-      newCard.style.cssText = `background:${e?.color}`;
-      newCard.innerHTML = `
-        <img src="${e?.imgSrc}" alt="${key}" class="wrapper_card_img">
-      `;
-      console.log(e?.password)
+      newCard.style.cssText = `background:${color}`;
+      
+      newCard.innerHTML = setImage(svg, imgSrc, local, key);
+      //переделать под фронт и бэк отдельно неаверное
+      newCard.addEventListener("mousemove", fCardRotate);//чужой
+      newCard.addEventListener("mouseout", fCardDefault);//чужой
+      //console.log(password)
       wrapper.appendChild(newCard);
     }
   }
+  //чужой
+  function fCardRotate(ev) {
+    this.style.transform = `scale(1.1) perspective(1000px) rotatey(${(ev.offsetX - this.offsetWidth / 2) / 6}deg) rotatex(${((ev.offsetY - this.offsetHeight / 2) / 6) * -1}deg)`;
+  }
+  function fCardDefault() {
+    this.style.transform = ``;
+  }
+
   renderCards(tipadatabazaprishla);
 
 });
