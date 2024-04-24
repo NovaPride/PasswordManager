@@ -56,15 +56,15 @@ document.addEventListener("DOMContentLoaded", e => {
         </div>
       `;
     }
-  }
+  };
   
   //чужой
   function fCardRotate(e) {
     this.style.transform = `scale(1.1) perspective(1000px) rotatey(${(e.offsetX - this.offsetWidth / 2) / 6}deg) rotatex(${((e.offsetY - this.offsetHeight / 2) / 6) * -1}deg)`;
-  }
+  };
   function fCardDefault() {
     this.style.transform = ``;
-  }
+  };
 
   function renderCards(obj, imgPath){
     let i = 0;
@@ -75,28 +75,47 @@ document.addEventListener("DOMContentLoaded", e => {
       newCard.style.cssText = `background:${color}`;
       newCard.addEventListener("mousemove", fCardRotate);//чужой
       newCard.addEventListener("mouseout", fCardDefault);//чужой
-      newCard.addEventListener("click", () => {
-        if (password) {
-          navigator.clipboard.writeText(password)
-            .then(() => {
-              const audio = new Audio("./src/sounds/copysound.mp3");
-              audio.play();
-            })
-            .catch(err => {
-              //console.log('Something went wrong', err);//сюда можно ошибку
-            })
-        }
-      })
       newCard.innerHTML = setImage(imgPath, svg, imgSrc, local, key);                                          
       wrapper.appendChild(newCard);
     }
-  }
+  };
   
   const localImageStartPath = "./src/icons/";
+  const passwords = [];
 
   fetch('http://localhost:3000/passwords')
     .then(data => data.json())
-    .then(db => renderCards(db, localImageStartPath));
+    .then(db => {
+      renderCards(db, localImageStartPath);
+      for(const [key, {password} = e] of Object.entries(db)){
+        passwords.push(password)
+      }//может пойти по пизде наверное
+    });
+
+ function ifCardGetCard(target){
+    if (target.dataset.cardFrontImg == '') {
+      return target.parentElement;
+    } else if (target.dataset.cardFront  == '') {
+      return target;
+    }
+  };
+
+  wrapper.addEventListener("click", ({target} = e) => {
+    let card = ifCardGetCard(target);
+    if (card) {
+      const cardID = card.parentElement.dataset.card;
+      const password = passwords[cardID];//может пойти по пизде наверное
+      if (password) {
+        navigator.clipboard.writeText(password)
+          .then(() => {
+            const audio = new Audio("./src/sounds/copysound.mp3");
+            audio.play();
+          })
+          .catch(err => {
+            //console.log('Something went wrong', err);//сюда можно ошибку
+          })
+      }
+    }
+  });
 
 });
-
