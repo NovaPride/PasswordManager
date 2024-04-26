@@ -1,4 +1,4 @@
-import { ifCardGetCard, fCardRotate, fCardDefault} from '../utils.js/utils';
+import { ifCardGetCard, fCardRotate, fCardDefault} from '../utils/utils';
 import { localImageStartPath } from '../constants/constants';
 
 function cards_wrapper(){
