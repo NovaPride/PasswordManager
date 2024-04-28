@@ -1,6 +1,7 @@
 import { root } from '../selectors/selectors';
-import { $, isHaveClass, clog, cdir } from '../utils/utils'
-
+import { $, isHaveClass, clog, cdir } from '../utils/utils';
+import { renderCards} from '../modules/cards_wrapper';
+import { localImageStartPath } from '../constants/constants';
 
 function header() {
   const header = document.createElement("header");
@@ -17,7 +18,7 @@ function header() {
   
   const searchbox = $("[data-searchbox]"),
         searchtext = $("[data-searchtext]");
-        
+
   searchbox.addEventListener("click", ({currentTarget}) => {
     const isActive = isHaveClass(currentTarget, "searchbox_active"),
           isEmpty = searchtext.value === "";
@@ -36,13 +37,20 @@ function header() {
     if(!isActive){searchbox.classList.add("searchbox_active");}
   });
 
-  // search.addEventListener("keyup", e => {
-    
-  //   const isActive = isHaveClass(e.currentTarget, "search_active"),
-  //         isEmpty = e.currentTarget.value === "";
-  //   if(isActive){clog(e.currentTarget.value)}
+ 
 
-  // });
+  fetch('http://localhost:3000/passwords')
+    .then(data => data.json())
+    .then(db => {
+      renderCards(db, localImageStartPath);
+      searchtext.addEventListener("keyup", e => {
+        const isActive = isHaveClass(searchbox, "searchbox_active");
+        if(isActive){
+          renderCards(db, localImageStartPath, e.currentTarget.value);
+        }
+      });
+    }
+  );
 }
 
 export default header;

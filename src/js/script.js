@@ -2,10 +2,11 @@
 
 import header from './modules/header';
 import cards from './modules/cards';
-import cards_wrapper from './modules/cards_wrapper';
+// import { renderCards} from './modules/cards_wrapper';
+// import { localImageStartPath } from './constants/constants';
+
 
 document.addEventListener("DOMContentLoaded", () => {
   header();
   cards();
-  cards_wrapper();
 });

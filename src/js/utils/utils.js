@@ -2,8 +2,8 @@ export function $(selector) {
   return document.querySelector(`${selector}`);
 }
 
-export function clog(str) {
-  console.log(str);
+export function clog(...str) {
+  console.log(...str);
 }
 
 export function cdir(str) {
