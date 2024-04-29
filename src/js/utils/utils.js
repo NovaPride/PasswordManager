@@ -6,8 +6,8 @@ export function clog(...str) {
   console.log(...str);
 }
 
-export function cdir(str) {
-  console.dir(str);
+export function cdir(...str) {
+  console.dir(...str);
 }
 
 export function ifCardGetCard(target){
