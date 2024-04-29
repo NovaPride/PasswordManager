@@ -1,21 +1,9 @@
-import { root } from '../selectors/selectors';
-import { $, isHaveClass, clog, cdir } from '../utils/utils';
-import { renderCards} from '../modules/cards_wrapper';
-import { localImageStartPath } from '../constants/constants';
+import { root } from '../../selectors/selectors';
+import { $, isHaveClass, clog, cdir } from '../../utils/utils';
+import { renderCards} from '../cards/cards';
+import { localImageStartPath } from '../../constants/constants';
 
 function header() {
-  const header = document.createElement("header");
-  header.innerHTML = `
-    <div class="container">
-      <nav class="navbar">
-          <form data-searchbox class="searchbox" action="" >
-            <input data-searchtext class="searchtext" type="text" id="search_textbox" spellcheck="false" autocomplete="off">
-          </form>
-      </nav>
-    </div>
-  `;
-  root.append(header);
-  
   const searchbox = $("[data-searchbox]"),
         searchtext = $("[data-searchtext]");
 

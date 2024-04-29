@@ -1,6 +1,6 @@
-import { ifCardGetCard, fCardRotate, fCardDefault} from '../utils/utils';
-import { localImageStartPath } from '../constants/constants';
-import { $, isHaveClass, clog, cdir } from '../utils/utils';
+import { ifCardGetCard, fCardRotate, fCardDefault} from '../../utils/utils';
+import { localImageStartPath } from '../../constants/constants';
+import { $, isHaveClass, clog, cdir } from '../../utils/utils';
 //function cards_wrapper(db){
   
   let passwords = [];
