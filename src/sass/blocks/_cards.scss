@@ -20,6 +20,13 @@
       transition: 0.2s all;
       transform: scale(1.0) perspective(1000px) rotateY(0);//вот тут крутить
       transform-style: preserve-3d;
+      &[data-card = newCard]{
+        border-radius: 100%;
+        transform: scale(0.7);
+        &:hover{
+          transform: scale(0.8) perspective(1000px) rotateY(0);
+        }
+      }
       &:hover{
         // opacity: 1;
         // filter: brightness(1);

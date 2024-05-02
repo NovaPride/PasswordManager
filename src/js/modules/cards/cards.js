@@ -44,25 +44,44 @@ export function addListenerToWrapper(){
   
 }
 
+function createCard (key, {svg, imgSrc, local, color, password} = e, wrapper, imgPath, index){
+  const newCard = document.createElement("div");
+  newCard.setAttribute("data-card", index);
+  newCard.classList.add("wrapper_card");
+  newCard.style.cssText = `background:${color}`;
+  if (key != "newCard"){
+    newCard.addEventListener("mousemove", fCardRotate);//чужой
+    newCard.addEventListener("mouseout", fCardDefault);//чужой
+  }
+  newCard.innerHTML = setImage(imgPath, svg, imgSrc, local, key);                                          
+  wrapper.appendChild(newCard);
+  passwords.push(password);//может пойти по пизде наверное
+}
+
 
 export function renderCards(obj, imgPath, search){
   const wrapper = $("[data-wrapper]");
   wrapper.innerHTML = "";
   passwords = [];
   let i = 0;
-  for (const [key, {svg, imgSrc, local, color, password} = e] of Object.entries(obj)) {
+  for (const [key, e] of Object.entries(obj)) {
     if(search == "" || search == undefined || key.slice(0, search?.length) === search){ 
-      const newCard = document.createElement("div");
-      newCard.setAttribute("data-card", i++);
-      newCard.classList.add("wrapper_card");
-      newCard.style.cssText = `background:${color}`;
-      newCard.addEventListener("mousemove", fCardRotate);//чужой
-      newCard.addEventListener("mouseout", fCardDefault);//чужой
-      newCard.innerHTML = setImage(imgPath, svg, imgSrc, local, key);                                          
-      wrapper.appendChild(newCard);
-      passwords.push(password);//может пойти по пизде наверное
+      createCard(key, e, wrapper, imgPath, i++);
     } 
   }
+  createCard(
+    "newCard", 
+    {
+      svg: "svg/addNewCard.svg",
+      imgSrc: "svg/addNewCard.svg",
+      local: "true",
+      color: "rgba(235, 235, 235, 0.25)",
+      password: "none"
+    },
+    wrapper,
+    imgPath,
+    "newCard"
+  );
 };
   
  

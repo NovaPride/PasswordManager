@@ -60,12 +60,6 @@
       "color":"#2074F4",
       "password":"facebookpass"
     },
-    "wikipedia":{
-      "svg":"svg/wikipedia.svg",
-      "local":"true",
-      "color":"#fefffe",
-      "password":"wikipediapass"
-    },
     "reddit":{
       "svg":"svg/reddit.svg",
       "local":"true",
