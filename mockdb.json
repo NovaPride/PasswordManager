@@ -1,81 +1,102 @@
 {
-  "passwords": {
-    "telegram": {
-      "svg": "svg/telegram.svg",
-      "local": "true",
+  "cards": [
+    {
+      "id": "dbe1",
+      "name": "telegram",
+      "imgSrc": "svg/telegram.svg",
       "color": "#3D92BA",
       "password": "telegrampass"
     },
-    "google": {
-      "svg": "svg/google.svg",
-      "local": "true",
+    {
+      "id": "4b1d",
+      "name": "google",
+      "imgSrc": "svg/google.svg",
       "color": "#FEFFFE",
       "password": "googlepass"
     },
-    "steam": {
-      "svg": "svg/steam.svg",
-      "local": "true",
+    {
+      "id": "444a",
+      "name": "steam",
+      "imgSrc": "svg/steam.svg",
       "color": "#144B7E",
       "password": "steampass"
     },
-    "priorbank": {
-      "svg": "svg/priorbank.svg",
-      "local": "true",
+    {
+      "id": "5af0",
+      "name": "priorbank",
+      "imgSrc": "svg/priorbank.svg",
       "color": "#FEF102",
       "password": "priorbankpass"
     },
-    "discord": {
-      "svg": "svg/discord.svg",
-      "local": "true",
+    {
+      "id": "5be0",
+      "name": "discord",
+      "imgSrc": "svg/discord.svg",
       "color": "#5865F2",
       "password": "discordpass"
     },
-    "twitch": {
-      "svg": "svg/twitch.svg",
-      "local": "true",
+    {
+      "id": "47e1",
+      "name": "twitch",
+      "imgSrc": "svg/twitch.svg",
       "color": "#ffffff",
       "password": "twitchpass"
     },
-    "kufar": {
-      "svg": "svg/kufar.svg",
-      "local": "true",
+    {
+      "id": "fc30",
+      "name": "kufar",
+      "imgSrc": "svg/kufar.svg",
       "color": "#fefffe",
       "password": "kufarpass"
     },
-    "spotify": {
-      "svg": "svg/spotify.svg",
-      "local": "true",
+    {
+      "id": "19ef",
+      "name": "spotify",
+      "imgSrc": "svg/spotify.svg",
       "color": "#fefffe",
       "password": "spotifypass"
     },
-    "instagram": {
-      "svg": "svg/instagram.svg",
-      "local": "true",
+    {
+      "id": "b328",
+      "name": "instagram",
+      "imgSrc": "svg/instagram.svg",
       "color": "#7c42c1",
       "password": "instagrampass"
     },
-    "facebook": {
-      "svg": "svg/facebook.svg",
-      "local": "true",
+    {
+      "id": "1fa3",
+      "name": "facebook",
+      "imgSrc": "svg/facebook.svg",
       "color": "#2074F4",
       "password": "facebookpass"
     },
-    "reddit": {
-      "svg": "svg/reddit.svg",
-      "local": "true",
+    {
+      "id": "b530",
+      "name": "reddit",
+      "imgSrc": "svg/reddit.svg",
       "color": "#FF4500",
       "password": "redditpass"
-    }
-  },
-  "post": [
+    },
     {
-      "id": "c5b1",
-      "redssit": {
-        "svg": "svg/reddit.svg",
-        "local": "true",
-        "color": "#FF4500",
-        "password": "redditpass"
-      }
+      "id": "3e67",
+      "name": "test",
+      "imgSrc": "img/test.png",
+      "color": "#FFFFFF",
+      "password": "tespass"
+    },
+    {
+      "id": "75f9",
+      "name": "test",
+      "imgSrc": "img/test.png",
+      "color": "#FFFFFF",
+      "password": "tespass"
+    },
+    {
+      "id": "bc42",
+      "name": "test",
+      "imgSrc": "img/test.png",
+      "color": "#FFFFFF",
+      "password": "tespass"
     }
   ]
 }

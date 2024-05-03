@@ -27,7 +27,7 @@ function addListenersToHeader(db) {
 
   searchtext.addEventListener("keyup", e => {
     if(isActive()){
-      renderCards(db, localImageStartPath, e.currentTarget.value);
+      renderCards(db, e.currentTarget.value);
     }
   });
 }

@@ -7,21 +7,14 @@ export async function getDB(){
     .then(data => data.json());
 }
 
-export async function addToDB(){//обработку http ошибок сделать
+export async function addToDB(card){//обработку http ошибок сделать
   await new Promise(resolve => setTimeout(resolve, 1000));
-  fetch("http://localhost:3000/post", {
+  fetch(dbAdress, {
     method: "POST",
     headers: {
       'Content-type': 'application/json'
     },
-    body: JSON.stringify({
-        "redssit":{
-          "svg":"svg/reddit.svg",
-          "local":"true",
-          "color":"#FF4500",
-          "password":"redditpass"
-        }
-    })
+    body: JSON.stringify(card)
     
   });
 

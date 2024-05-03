@@ -18,8 +18,9 @@ document.addEventListener("DOMContentLoaded", async e => {
   cards_layout();
   
   const db = await getDB();
-  renderCards(db, localImageStartPath);
-  addListenerToWrapper();
+  //clog(db);
+  renderCards(db);
+  addListenerToWrapper(db);
   addListenersToHeader(db);
   //await addToDB();
 });
