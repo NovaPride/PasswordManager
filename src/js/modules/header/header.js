@@ -9,43 +9,32 @@ function addListenersToHeader(db) {
 
   const isActive = () => isHaveClass(searchbox, "searchbox_active");
 
-  // function updateTimer(target, timer) {
-  //   if (timer){
-  //     clear
-  //   } else {
-  //     return setTimeout(() => {
-  //       if (searchtext.value === ""){
-  //         target.classList.remove("searchbox_active");
-  //         searchtext.blur();
-  //       }
-  //     }, 3000);
-  //   }
-  // }
+  function closeIfScroll(target){
+    function callback(){
+      target.classList.remove("searchbox_active");
+      searchtext.blur();
+      window.removeEventListener("scroll", callback);
+    }
+    if (searchtext.value === "") {
+      window.addEventListener("scroll", callback);
+    }
+  }
 
   searchbox.addEventListener("click", ({currentTarget}) => {
     const isEmpty = searchtext.value === "";
-    // const interval = setInterval(() => {
-    //   if (searchtext.value === ""){
-    //     currentTarget.classList.remove("searchbox_active");
-    //     searchtext.blur();
-    //     clearInterval(interval);
-    //   }
-    // }, 3000);
     if (isActive()) {
       if (isEmpty) {
         currentTarget.classList.remove("searchbox_active");
         searchtext.blur();
-        //clearInterval(interval);
       }
     } else {
       currentTarget.classList.add("searchbox_active");
-      
-      //clearInterval(interval);
-      //clog(interval);
-      // const nig = updateTimer(currentTarget);
-      // updateTimer(currentTarget, nig);
+      closeIfScroll(currentTarget);
     }
   });
+
+  
+  
 
   searchtext.addEventListener("keydown", e => {
     if(!isActive()){searchbox.classList.add("searchbox_active");}

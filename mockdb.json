@@ -76,6 +76,20 @@
       "imgSrc": "svg/reddit.svg",
       "color": "#FF4500",
       "password": "redditpass"
+    },
+    {
+      "id": "9c3e",
+      "name": "test",
+      "imgSrc": "img/test.png",
+      "color": "#FFFFFF",
+      "password": "tespass"
+    },
+    {
+      "id": "e05b",
+      "name": "test",
+      "imgSrc": "img/test.png",
+      "color": "#FFFFFF",
+      "password": "tespass"
     }
   ]
 }

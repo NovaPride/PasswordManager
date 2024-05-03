@@ -8,23 +8,36 @@ let passwords = [];
 function setImage(imgSrc, name){
   
   return `
-    <div data-card-front class="wrapper_card_front">` +
+    <div data-card-front class="card_front">` +
       (function(){
         if (imgSrc) {
           const isLocal = imgSrc.slice(0, 3) === "img" || imgSrc.slice(0, 3) === "svg";
           if(isLocal){
-            return `<img data-card-front-img src="${localImageStartPath}${imgSrc}" alt="${name}" class="wrapper_card_front_img">`;
+            return `<img data-card-front-img src="${localImageStartPath}${imgSrc}" alt="${name}" class="card_front_img">`;
           } else {
-            return  `<img data-card-front-img src="${imgSrc}" alt="${name}" class="wrapper_card_front_img">`;
+            return  `<img data-card-front-img src="${imgSrc}" alt="${name}" class="card_front_img">`;
           }
         }
       }())
     + `</div>
-    <div data-card-back class="wrapper_card_back">
+    <div data-card-back class="card_back">
+      <div data-card-back-editor class="card_back_editor">
+        <form data-card-back-form class="card_back_editor_form">
+          {<br>
+            "name": "facebook",<br>
+            "imgSrc": "svg/facebook.svg",<br>
+            "color": "#2074F4",<br>
+            "password": "facebookpass"<br>
+          }
+        </form>
+      </div>
     </div>
   `;
 };
-
+  // "name": "facebook",
+    // "imgSrc": "svg/facebook.svg",
+    // "color": "#2074F4",
+    // "password": "facebookpass"
 
 
 export function addListenerToWrapper(db){
@@ -57,9 +70,30 @@ export function addListenerToWrapper(db){
       }
     }
   });
-  // wrapper.addEventListener("contextmenu", e => {
-  //   e.preventDefault();
-  // })
+  wrapper.addEventListener("contextmenu", e => {
+    e.preventDefault();
+    clog("пися");
+    const cardFront = ifCardGetCard(e.target);
+    if(cardFront){
+      const card = cardFront.parentElement;
+      card.removeEventListener("mousemove", fCardRotate);
+      card.removeEventListener("mouseout", fCardDefault);
+      card.style.transform = ``;
+      card.style.transition = ``;
+
+      //TODO сделай тут регулярку или хуй знает, чтоб брало цвет из инлайн стиля и подставляла в rgba понял? понял пшел нахуй
+     // clog(card.style.backgroundColor.split(','));
+      card.style.backgroundColor = "rgba(185,195,185,0.47)";
+      wrapper.classList.add("wrapper_swipe");
+      card.classList.add("card_fullscreen");
+
+
+      // setTimeout(()=>{
+      //   wrapper.classList.remove("wrapper_swipe");
+      //   card.classList.remove("card_fullscreen");
+      // }, 5000)
+    }
+  })
   // wrapper.addEventListener("mousedown", downEvent => {
   //   downEvent.preventDefault();
   //   const cardFront = ifCardGetCard(downEvent.target);
@@ -82,7 +116,7 @@ export function addListenerToWrapper(db){
 function createCard ({name, imgSrc, color, password} = e, wrapper, index){
   const newCard = document.createElement("div");
   newCard.setAttribute("data-card", index);
-  newCard.classList.add("wrapper_card");
+  newCard.classList.add("card");
   newCard.style.cssText = `background:${color}`;
   if (name != "newCard"){
     newCard.addEventListener("mousemove", fCardRotate);//чужой
