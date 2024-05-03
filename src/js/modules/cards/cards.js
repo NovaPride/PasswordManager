@@ -38,6 +38,9 @@ export function addListenerToWrapper(){
           .catch(err => {
             //console.log('Something went wrong', err);//сюда можно ошибку
           })
+      } else if (cardID === "newCard") {
+        //сюда добавление новой карточки
+        
       }
     }
   });
