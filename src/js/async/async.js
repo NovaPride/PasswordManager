@@ -8,7 +8,7 @@ export async function getDB(){
 }
 
 export async function addToDB(card){//обработку http ошибок сделать
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  //await new Promise(resolve => setTimeout(resolve, 1000));
   fetch(dbAdress, {
     method: "POST",
     headers: {

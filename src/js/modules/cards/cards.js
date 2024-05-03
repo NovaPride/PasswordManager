@@ -29,6 +29,7 @@ function setImage(imgSrc, name){
 
 export function addListenerToWrapper(db){
   const wrapper = $("[data-wrapper]");
+
   wrapper.addEventListener("click", async ({target} = e) => {
     let card = ifCardGetCard(target);
     if (card) {
@@ -45,18 +46,37 @@ export function addListenerToWrapper(db){
           })
       } else if (cardID === "newCard") {
         //сюда добавление новой карточки
-        const card = {
+        const newCard = {
           "name": "test",
           "imgSrc": "img/test.png",
           "color": "#FFFFFF",
           "password": "tespass"
         };
-        await addToDB(card);
+        await addToDB(newCard);
         location.reload();
       }
     }
   });
-  
+  // wrapper.addEventListener("contextmenu", e => {
+  //   e.preventDefault();
+  // })
+  // wrapper.addEventListener("mousedown", downEvent => {
+  //   downEvent.preventDefault();
+  //   const cardFront = ifCardGetCard(downEvent.target);
+  //   //card.style.display = `none`;
+  //   if(cardFront){
+  //     const card = cardFront.parentElement;
+  //     clog(downEvent);
+  //     card.removeEventListener("mousemove", fCardRotate);
+  //     card.removeEventListener("mouseout", fCardDefault);
+  //     card.style.transform = 
+  //     `scale(1) perspective(1000px)`;
+  //     wrapper.addEventListener("mousemove", moveEvent => {
+  //       clog("pizdec")
+  //     });
+  //   }
+    
+  // })
 }
 
 function createCard ({name, imgSrc, color, password} = e, wrapper, index){
