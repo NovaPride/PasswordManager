@@ -5,7 +5,7 @@ import { addToDB } from '../../async/async';
 
 let passwords = [];
 
-function setImage(imgSrc, name){
+function setImage(imgSrc, name, color, password){
   
   return `
     <div data-card-front class="card_front">` +
@@ -24,10 +24,10 @@ function setImage(imgSrc, name){
       <div data-card-back-editor class="card_back_editor">
         <form data-card-back-form class="card_back_editor_form">
           {<br>
-            "name": "facebook",<br>
-            "imgSrc": "svg/facebook.svg",<br>
-            "color": "#2074F4",<br>
-            "password": "facebookpass"<br>
+            ㅤ"name": "${name}",<br>
+            ㅤ"imgSrc": "${imgSrc}",<br>
+            ㅤ"color": "${color}",<br>
+            ㅤ"password": "${password}"<br>
           }
         </form>
       </div>
@@ -70,20 +70,39 @@ export function addListenerToWrapper(db){
       }
     }
   });
+
+  function createPlaceholderCard(elementID){
+    const card =  wrapper.querySelector(`[data-card="${elementID}"]`);
+    const newCard = document.createElement("div");
+    newCard.setAttribute("data-card", "placeholder");
+    newCard.classList.add("card");
+    card.insertAdjacentElement("afterend", newCard);
+
+  }
+
+  function onlyInteger(str){
+    const reg = /[0-9]/g;
+    return str.match(reg).join('');
+  }
+
   wrapper.addEventListener("contextmenu", e => {
     e.preventDefault();
-    clog("пися");
     const cardFront = ifCardGetCard(e.target);
-    if(cardFront){
+    if(cardFront ){//&& name != "newCard"
       const card = cardFront.parentElement;
+      const dataID = card.dataset.card;
+      
+      if(dataID === "newCard"){return;}
       card.removeEventListener("mousemove", fCardRotate);
       card.removeEventListener("mouseout", fCardDefault);
       card.style.transform = ``;
       card.style.transition = ``;
+      
+      createPlaceholderCard(dataID);
 
-      //TODO сделай тут регулярку или хуй знает, чтоб брало цвет из инлайн стиля и подставляла в rgba понял? понял пшел нахуй
-     // clog(card.style.backgroundColor.split(','));
-      card.style.backgroundColor = "rgba(185,195,185,0.47)";
+      const reg = /[0-9]/g;
+      const [red, green, blue] = card.style.backgroundColor.split(',').map(e => onlyInteger(e));
+      card.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.27)`;
       wrapper.classList.add("wrapper_swipe");
       card.classList.add("card_fullscreen");
 
@@ -122,7 +141,7 @@ function createCard ({name, imgSrc, color, password} = e, wrapper, index){
     newCard.addEventListener("mousemove", fCardRotate);//чужой
     newCard.addEventListener("mouseout", fCardDefault);//чужой
   }
-  newCard.innerHTML = setImage(imgSrc, name);                                          
+  newCard.innerHTML = setImage(imgSrc, name, color, password);                                          
   wrapper.appendChild(newCard);
   passwords.push(password);//может пойти по пизде наверное
 }

@@ -90,6 +90,13 @@
       "imgSrc": "img/test.png",
       "color": "#FFFFFF",
       "password": "tespass"
+    },
+    {
+      "id": "3ab5",
+      "name": "test",
+      "imgSrc": "img/test.png",
+      "color": "#FFFFFF",
+      "password": "tespass"
     }
   ]
 }

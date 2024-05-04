@@ -32,6 +32,9 @@
         &:hover{
           transform: scale(0.8) perspective(1000px) rotateY(0);
         }
+        .card_back{
+          display: none;
+        }
       }
       &:hover{
         // opacity: 1;
@@ -94,6 +97,7 @@
           left: 50%;
           transform: translateZ(15px) translate(-50%, -50%);
           background-color: rgba(31,30,30,255);
+          border-radius: 0.5rem;
           &_form{
             padding: 1.4rem 1rem;
             color: rgba(206,145,117,255);
