@@ -1,48 +1,68 @@
-import { root } from '../../selectors/selectors';
 import { $, isHaveClass, clog, cdir } from '../../utils/utils';
 import { renderCards} from '../cards/cards';
-import { localImageStartPath, dbAdress } from '../../constants/constants';
 
 function addListenersToHeader(db) {
   const searchbox = $("[data-searchbox]"),
         searchtext = $("[data-searchtext]");
 
-  const isActive = () => isHaveClass(searchbox, "searchbox_active");
-
-  function closeIfScroll(target){
-    function callback(){
-      target.classList.remove("searchbox_active");
-      searchtext.blur();
-      window.removeEventListener("scroll", callback);
-    }
-    if (searchtext.value === "") {
-      window.addEventListener("scroll", callback);
+  const headerTimer = {
+    start : function () {
+      this.timer = setTimeout(() => {
+        closeSearchbar();
+      }, 3000);
+    },
+    stop : function () {
+      clearTimeout(this.timer);
+      this.timer = undefined;
     }
   }
 
-  searchbox.addEventListener("click", ({currentTarget}) => {
-    const isEmpty = searchtext.value === "";
-    if (isActive()) {
-      if (isEmpty) {
-        currentTarget.classList.remove("searchbox_active");
-        searchtext.blur();
+  const isActive = () => isHaveClass(searchbox, "searchbox_active");
+
+  const isEmpty = () => searchtext.value === "";
+
+  function openSearchbar(){
+    searchbox.classList.add("searchbox_active");
+  }
+
+  function closeSearchbar(){
+    searchbox.classList.remove("searchbox_active");
+    searchtext.value = "";
+    searchtext.blur();
+    renderCards(db, "");
+  }
+
+  function closeIfScroll() {
+    function callback() {
+      if (isEmpty()) {
+        headerTimer.stop();
+        closeSearchbar();
+        window.removeEventListener("scroll", callback);
       }
-    } else {
-      currentTarget.classList.add("searchbox_active");
-      closeIfScroll(currentTarget);
     }
+    window.addEventListener("scroll", callback);
+  }
+
+  searchbox.addEventListener("focusin", () => headerTimer.stop());
+
+  searchbox.addEventListener("focusout", () => {
+    if (isEmpty()) headerTimer.start()
   });
 
-  
-  
-
-  searchtext.addEventListener("keydown", e => {
-    if(!isActive()){searchbox.classList.add("searchbox_active");}
+  searchtext.addEventListener("keydown", () => {
+    if (!isActive()) openSearchbar();
   });
 
-  searchtext.addEventListener("keyup", e => {
-    if(isActive()){
-      renderCards(db, e.currentTarget.value);
+  searchtext.addEventListener("keyup", ({currentTarget}) => {
+    if (isActive()) renderCards(db, currentTarget.value);
+  });
+
+  searchbox.addEventListener("click", () => {
+    if (isActive() && isEmpty()) {
+      closeSearchbar();
+    } else {
+      openSearchbar();
+      closeIfScroll();
     }
   });
 }
