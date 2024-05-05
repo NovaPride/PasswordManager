@@ -4,6 +4,7 @@ import { $, isHaveClass, clog, cdir } from '../../utils/utils';
 import { addToDB } from '../../async/async';
 
 let passwords = [];
+let isCardFullscreen = false;
 
 function setImage(imgSrc, name, color, password){
   
@@ -93,6 +94,7 @@ export function addListenerToWrapper(db){
       const dataID = card.dataset.card;
       
       if(dataID === "newCard"){return;}
+      if(isCardFullscreen){return;}
       card.removeEventListener("mousemove", fCardRotate);
       card.removeEventListener("mouseout", fCardDefault);
       card.style.transform = ``;
@@ -106,7 +108,7 @@ export function addListenerToWrapper(db){
       wrapper.classList.add("wrapper_swipe");
       card.classList.add("card_fullscreen");
 
-
+      isCardFullscreen = true;
       // setTimeout(()=>{
       //   wrapper.classList.remove("wrapper_swipe");
       //   card.classList.remove("card_fullscreen");
