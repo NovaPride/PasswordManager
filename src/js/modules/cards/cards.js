@@ -1,13 +1,13 @@
 import { ifCardGetCard, fCardRotate, fCardDefault} from '../../utils/utils';
-import { localImageStartPath } from '../../constants/constants';
+import { localImageStartPath, deleteConfirmMessage } from '../../constants/constants';
 import { $, isHaveClass, clog, cdir } from '../../utils/utils';
-import { addToDB } from '../../async/async';
+import { addToDB, updateInDB, removeFromDB } from '../../async/async';
 
 let passwords = [];
+let cardsIDs = {};
 let isCardFullscreen = false;
 
 function setImage(imgSrc, name, color, password){
-  
   return `
     <div data-card-front class="card_front">` +
       (function(){
@@ -24,25 +24,61 @@ function setImage(imgSrc, name, color, password){
     <div data-card-back class="card_back">
       <div data-card-back-editor class="card_back_editor">
         <form data-card-back-form class="card_back_editor_form">
-          {<br>
-            ㅤ"name": "${name}",<br>
-            ㅤ"imgSrc": "${imgSrc}",<br>
-            ㅤ"color": "${color}",<br>
-            ㅤ"password": "${password}"<br>
-          }
+          <span>{<br></span>
+          <div class="card_back_editor_form_element">
+            <label for="name">ㅤ"name":</label>
+            <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="name" name="name" value="${name}" spellcheck="false">
+          </div>
+          <div class="card_back_editor_form_element">
+            <label for="imgSrc">ㅤ"imgSrc":</label>
+            <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="imgSrc" name="imgSrc" value="${imgSrc}" spellcheck="false">
+          </div>
+          <div class="card_back_editor_form_element">
+            <label for="color">ㅤ"color":</label>
+            <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="color" name="color" value="${color}" spellcheck="false">
+          </div>
+          <div class="card_back_editor_form_element">
+            <label for="password">ㅤ"password":</label>
+            <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="password" name="password" value="${password}" spellcheck="false">
+          </div>
+          <span>}</span>
+          <div class="card_back_editor_form_element">
+            
+            <button data-card-edit-submit class="card_back_editor_form_element_submit pushable" type="submit" id="submit" name="submit">
+              <span class="shadow"></span>
+              <span class="edge"></span>
+              <span class="front">
+                Save
+              </span>
+            </button>
+          </div>
         </form>
       </div>
     </div>
   `;
 };
-  // "name": "facebook",
-    // "imgSrc": "svg/facebook.svg",
-    // "color": "#2074F4",
-    // "password": "facebookpass"
+
+//<input data-card-edit-submit class="card_back_editor_form_element_submit" type="submit" id="submit" name="submit">
+
+// <button class="pushable">
+//       <span class="shadow"></span>
+//       <span class="edge"></span>
+//       <span class="front">
+//         Push Me
+//       </span>
+//     </button>
+
+
+{/* "name": "${name}",<br>
+  ㅤ"imgSrc": "${imgSrc}",<br>
+  ㅤ"color": "${color}",<br>
+  ㅤ"password": "${password}"<br></br> */}
+
 
 
 export function addListenerToWrapper(db){
   const wrapper = $("[data-wrapper]");
+  const navbar = $("[data-navbar]");
 
   wrapper.addEventListener("click", async ({target} = e) => {
     let card = ifCardGetCard(target);
@@ -107,45 +143,60 @@ export function addListenerToWrapper(db){
       card.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.27)`;
       wrapper.classList.add("wrapper_swipe");
       card.classList.add("card_fullscreen");
+      navbar.classList.add("hide");
 
       isCardFullscreen = true;
+
       // setTimeout(()=>{
       //   wrapper.classList.remove("wrapper_swipe");
       //   card.classList.remove("card_fullscreen");
-      // }, 5000)
+      // }, 2000)
     }
   })
-  // wrapper.addEventListener("mousedown", downEvent => {
-  //   downEvent.preventDefault();
-  //   const cardFront = ifCardGetCard(downEvent.target);
-  //   //card.style.display = `none`;
-  //   if(cardFront){
-  //     const card = cardFront.parentElement;
-  //     clog(downEvent);
-  //     card.removeEventListener("mousemove", fCardRotate);
-  //     card.removeEventListener("mouseout", fCardDefault);
-  //     card.style.transform = 
-  //     `scale(1) perspective(1000px)`;
-  //     wrapper.addEventListener("mousemove", moveEvent => {
-  //       clog("pizdec")
-  //     });
-  //   }
-    
-  // })
+ 
+  wrapper.addEventListener("submit", async e =>{
+    e.preventDefault();
+    const inputs = e.target.querySelectorAll("[data-card-edit-textinput]");
+    const newCard = {};
+    let emptyCount = 0;
+    const cardID = e.target.parentElement.parentElement.parentElement.dataset.card;//bruh
+    for (const {name, value} of Object.values(inputs)) {
+      newCard[`${name}`] = value; 
+      if (!value) emptyCount++;
+    }
+    const cardsAmount = Object.keys(newCard).length;
+
+    if (emptyCount === cardsAmount) {
+      if (confirm(deleteConfirmMessage)){
+        await removeFromDB(newCard, cardsIDs[cardID]);
+        location.reload(); //это снести нахуй наверное потом
+      }
+    } else {
+      await updateInDB(newCard, cardsIDs[cardID]);
+      location.reload(); //это снести нахуй наверное потом
+    }
+
+  
+  })
 }
 
-function createCard ({name, imgSrc, color, password} = e, wrapper, index){
+
+
+
+function createCard ({id, name, imgSrc, color, password} = e, wrapper, index){
   const newCard = document.createElement("div");
   newCard.setAttribute("data-card", index);
   newCard.classList.add("card");
   newCard.style.cssText = `background:${color}`;
   if (name != "newCard"){
+    //clog(id)
     newCard.addEventListener("mousemove", fCardRotate);//чужой
     newCard.addEventListener("mouseout", fCardDefault);//чужой
   }
   newCard.innerHTML = setImage(imgSrc, name, color, password);                                          
   wrapper.appendChild(newCard);
   passwords.push(password);//может пойти по пизде наверное
+  cardsIDs[`${index}`] = id;
 }
 
 

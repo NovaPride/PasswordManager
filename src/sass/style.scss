@@ -30,8 +30,11 @@ body{
   //background-color: aqua;
 }
 
+.hide{
+  display: none
+}
 
 
 @import 'blocks/header';
 @import 'blocks/cards';
-
+@import 'blocks/guptaButton';

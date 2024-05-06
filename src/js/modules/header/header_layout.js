@@ -4,7 +4,7 @@ function header_layout(){
   const header = document.createElement("header");
   header.innerHTML = `
     <div class="container">
-      <nav class="navbar">
+      <nav data-navbar class="navbar">
           <form data-searchbox class="searchbox" action="" >
             <input data-searchtext class="searchtext" name="searchtext" type="text" id="search_textbox" spellcheck="false" autocomplete="off">
           </form>

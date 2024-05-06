@@ -29,7 +29,7 @@ function addListenersToHeader(db) {
     searchbox.classList.remove("searchbox_active");
     searchtext.value = "";
     searchtext.blur();
-    renderCards(db, "");
+    
   }
 
   function closeIfScroll() {
@@ -60,6 +60,7 @@ function addListenersToHeader(db) {
   searchbox.addEventListener("click", () => {
     if (isActive() && isEmpty()) {
       closeSearchbar();
+      renderCards(db, "");
     } else {
       openSearchbar();
       closeIfScroll();
