@@ -15,8 +15,12 @@ body{
   //background-color: #EFF7F6;
   //overflow: hidden;
   background-color: #7F5A83;
-  background-image: linear-gradient(330deg, #7F5A83 0%, #0D324D 74%);
+ // background-image: linear-gradient(330deg, #7F5A83 0%, #0D324D 74%);
+  background: no-repeat linear-gradient(330deg, #7F5A83 0%, #0D324D 74%);
   height: 100vh;
+  &.mobile{
+    height: auto;
+  }
 }
 
 .container{
