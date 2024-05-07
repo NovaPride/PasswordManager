@@ -1,7 +1,8 @@
-import { ifCardGetCard, fCardRotate, fCardDefault} from '../../utils/utils';
+import { ifCardGetCard, fCardRotate, fCardDefault, getLastAmountOfCards, setLastAmountOfCards} from '../../utils/utils';
 import { localImageStartPath, deleteConfirmMessage } from '../../constants/constants';
 import { $, isHaveClass, clog, cdir } from '../../utils/utils';
 import { addToDB, updateInDB, removeFromDB } from '../../async/async';
+import { manualHeightChange } from '../../responsive/responsive';
 
 let passwords = [];
 let cardsIDs = {};
@@ -18,44 +19,47 @@ function setImage(imgSrc, name, color, password){
           } else {
             return  `<img data-card-front-img src="${imgSrc}" alt="${name}" class="card_front_img">`;
           }
-        }
+        } else return ``;
       }())
     + `</div>
-    <div data-card-back class="card_back">
-      <div data-card-back-editor class="card_back_editor">
-        <form data-card-back-form class="card_back_editor_form">
-          <span>{<br></span>
-          <div class="card_back_editor_form_element">
-            <label for="name">ㅤ"name":</label>
-            <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="name" name="name" value="${name}" spellcheck="false">
-          </div>
-          <div class="card_back_editor_form_element">
-            <label for="imgSrc">ㅤ"imgSrc":</label>
-            <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="imgSrc" name="imgSrc" value="${imgSrc}" spellcheck="false">
-          </div>
-          <div class="card_back_editor_form_element">
-            <label for="color">ㅤ"color":</label>
-            <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="color" name="color" value="${color}" spellcheck="false">
-          </div>
-          <div class="card_back_editor_form_element">
-            <label for="password">ㅤ"password":</label>
-            <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="password" name="password" value="${password}" spellcheck="false">
-          </div>
-          <span>}</span>
-          <div class="card_back_editor_form_element">
-            
-            <button data-card-edit-submit class="card_back_editor_form_element_submit pushable" type="submit" id="submit" name="submit">
-              <span class="shadow"></span>
-              <span class="edge"></span>
-              <span class="front">
-                Save
-              </span>
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  `;
+    <div data-card-back class="card_back">` +
+      (function(){
+        if (name != "skeletLoad" && name != "newCard") {
+          return `<div data-card-back-editor class="card_back_editor">
+          <form data-card-back-form class="card_back_editor_form">
+            <span>{<br></span>
+            <div class="card_back_editor_form_element">
+              <label for="name">ㅤ"name":</label>
+              <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="name" name="name" value="${name}" spellcheck="false">
+            </div>
+            <div class="card_back_editor_form_element">
+              <label for="imgSrc">ㅤ"imgSrc":</label>
+              <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="imgSrc" name="imgSrc" value="${imgSrc}" spellcheck="false">
+            </div>
+            <div class="card_back_editor_form_element">
+              <label for="color">ㅤ"color":</label>
+              <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="color" name="color" value="${color}" spellcheck="false">
+            </div>
+            <div class="card_back_editor_form_element">
+              <label for="password">ㅤ"password":</label>
+              <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="password" name="password" value="${password}" spellcheck="false">
+            </div>
+            <span>}</span>
+            <div class="card_back_editor_form_element">
+              
+              <button data-card-edit-submit class="card_back_editor_form_element_submit pushable" type="submit" id="submit" name="submit">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front">
+                  Save
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>`
+        } else return ``;
+      }())
+      +`</div>`;
 };
 
 //<input data-card-edit-submit class="card_back_editor_form_element_submit" type="submit" id="submit" name="submit">
@@ -199,16 +203,17 @@ function createCard ({id, name, imgSrc, color, password} = e, wrapper, index){
   cardsIDs[`${index}`] = id;
 }
 
-
-export function renderCards(db, search){
+export function skeletLoad(){
   const wrapper = $("[data-wrapper]");
   wrapper.innerHTML = "";
-  passwords = [];
-  let i = 0;
-  for (const e of Object.values(db)) {
-    if(search == "" || search == undefined || e.name.slice(0, search?.length) === search){ 
-      createCard(e, wrapper, i++);
-    } 
+  const cardsAmount = getLastAmountOfCards();
+  for (let i = 0; i < cardsAmount; i++) {
+    createCard({
+      name: "skeletLoad",
+      imgSrc: "",
+      color: "rgba(235, 235, 235, 0.25)",
+      password: "none"
+    }, wrapper, "skeletLoad");
   }
   createCard(
     {
@@ -220,6 +225,32 @@ export function renderCards(db, search){
     wrapper,
     "newCard"
   );
+  manualHeightChange();
+}
+
+
+export function renderCards(db, search){
+  const wrapper = $("[data-wrapper]");
+  wrapper.innerHTML = "";
+  passwords = [];
+  let i = 0;
+  for (const e of Object.values(db)) {
+    if(search == "" || search == undefined || e.name.slice(0, search?.length) === search){ 
+      createCard(e, wrapper, i++);
+    } 
+  }
+  setLastAmountOfCards(i);
+  createCard(
+    {
+      name: "newCard",
+      imgSrc: "svg/addNewCard.svg",
+      color: "rgba(235, 235, 235, 0.25)",
+      password: "none"
+    },
+    wrapper,
+    "newCard"
+  );
+  manualHeightChange();
 };
   
  

@@ -33,9 +33,6 @@
         &:hover{
           transform: scale(0.8) perspective(1000px) rotateY(0);
         }
-        .card_back{
-          display: none;
-        }
       }
       &:hover{
         // opacity: 1;

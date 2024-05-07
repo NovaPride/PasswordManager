@@ -30,3 +30,19 @@ export function fCardRotate(e) { //чужой
 export function fCardDefault() { //чужой
   this.style.transform = ``;
 };
+
+export function getLastAmountOfCards(){
+  if (!localStorage.getItem("lastAmountOfCards")) 
+    localStorage.setItem("lastAmountOfCards", 11);
+  return localStorage.getItem("lastAmountOfCards")
+}
+
+export function setLastAmountOfCards(amount){
+  localStorage.setItem("lastAmountOfCards", amount);
+}
+
+export function getRandomIntInclusive(min, max) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+}

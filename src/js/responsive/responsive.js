@@ -9,7 +9,12 @@ function changeToMobile(){
     root.classList.remove("mobile");
 }
 
+export function manualHeightChange(){
+  changeToMobile();
+}
+
 export function bodyHeightChanger(){
   changeToMobile();
   window.addEventListener("resize", () => changeToMobile());
 }
+
