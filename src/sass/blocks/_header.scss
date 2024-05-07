@@ -1,34 +1,37 @@
-header{
+header {
   min-height: 9rem;
-  //background-color: #F2B5D4;
-  
-  .navbar{
+
+  .navbar {
     position: relative;
     padding-top: 3rem;
-    //background-color: #B5F2D4;
     width: 100%;
     height: 6rem;
   }
-  .searchbox{
+
+  .searchbox {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(180, 180, 180, 0.069);
+    background-color: rgba($header_color, 0.069);
     border-radius: 3rem;
-    border: 0.3rem solid rgba(180, 180, 180, 0.2);
+    border: 0.3rem solid rgba($header_color, 0.2);
     width: 10rem;
     height: 5rem;
     transition: 0.4s all;
-    &:hover{
-      background-color: rgba(180, 180, 180, 0.2);
+
+    &:hover {
+      background-color: rgba($header_color, 0.2);
     }
-    &_active{
+
+    &_active {
       width: 95rem;
     }
-    &_active:hover{
-      background-color: rgba(180, 180, 180, 0.069);
+
+    &_active:hover {
+      background-color: rgba($header_color, 0.069);
     }
-    .searchtext{
+
+    .searchtext {
       position: absolute;
       left: 50%;
       top: 50%;
@@ -37,11 +40,9 @@ header{
       font-size: 3rem;
       border: none;
       text-align: center;
-      //background-color: rgba(243, 3, 3, 1);
       background-color: rgba(0, 0, 0, 0);
       color: #fff;
       width: 95%;
-     
     }
   }
 }

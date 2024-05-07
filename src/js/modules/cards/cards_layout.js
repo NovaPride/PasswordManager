@@ -1,6 +1,6 @@
 import { root } from '../../selectors/selectors';
 
-function cards_layout(){
+export function cards_layout(){
   const cards = document.createElement("section");
   cards.classList.add("cards");
   cards.innerHTML = `
@@ -12,5 +12,3 @@ function cards_layout(){
   `;
   root.append(cards);
 }
-
-export default cards_layout;

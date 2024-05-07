@@ -1,6 +1,6 @@
 import { root } from '../../selectors/selectors';
 
-function header_layout(){
+export function header_layout(){
   const header = document.createElement("header");
   header.innerHTML = `
     <div class="container">
@@ -13,5 +13,3 @@ function header_layout(){
   `;
   root.append(header);
 }
-
-export default header_layout;

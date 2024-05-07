@@ -1,9 +1,7 @@
-.cards{
-  //overflow: hidden;
+.cards {
   transition: 0.2s all;
-  .wrapper{
+  .wrapper {
     padding: 3rem;
-  
     display: grid;
     grid-template: auto / repeat(auto-fill, 24rem);
     justify-content: center;
@@ -11,57 +9,50 @@
     align-items: stretch;
     gap: 3rem;
     transition: 2s all;
-    &_swipe{
-      
+    &_swipe {
       transform: translateX(-150vw);
     }
-    .card{
-      user-select: none;
+    .card {
+      @include selectDragOff;
       position: relative;
       width: 24rem;
       height: 24rem;
-      //border: 0.2rem solid black;
       border-radius: 2.5rem;
-      //opacity: .69; //3д не работает с фильтрами хз
-      //filter: brightness(.8) saturate(69%);
       transition: 0.2s all;
-      transform: scale(1.0) perspective(1000px) rotateY(0);//вот тут крутить
+      transform: scale(1) perspective(1000px) rotateY(0);
       transform-style: preserve-3d;
-      &[data-card = newCard]{
+      &[data-card="newCard"] {
         border-radius: 100%;
         transform: scale(0.7);
-        &:hover{
+        &:hover {
           transform: scale(0.8) perspective(1000px) rotateY(0);
         }
       }
-      &:hover{
-        // opacity: 1;
-        // filter: brightness(1);
-        transform: scale(1.1) perspective(1000px) rotateY(0); //для старыи браузеров наверн
+      &:hover {
+        transform: scale(1.1) perspective(1000px) rotateY(0);
       }
-      &_fullscreen{
+      &_fullscreen {
         transition: 2s all;
         position: absolute;
         z-index: 3;
         top: 35%;
         transform: scale(3) translateX(50vw) perspective(1000px) rotateY(180deg);
-        background-color: rgb(0,0,0);
-        &:hover{
+        background-color: rgb(0, 0, 0);
+        &:hover {
           transform: scale(3) translateX(50vw) perspective(1000px) rotateY(180deg);
         }
-        
-        .card_front{
+        .card_front {
           opacity: 0;
-          // display: none;
         }
       }
-      &_front{
+      &_front {
         position: absolute;
         transform: translateZ(15px);
         width: 100%;
         height: 100%;
         transition: 2.3s all;
-        &_img{
+        &_img {
+          @include selectDragOff;
           position: absolute;
           width: 69%;
           height: 69%;
@@ -69,42 +60,30 @@
           left: 50%;
           transform: translate(-50%, -50%);
         }
-        // &_svg{
-        //   position: absolute;
-        //   width: 100%;
-        //   height: 100%;
-        //   top: 50%;
-        //   left: 50%;
-        //   transform: translate(-50%, -50%);
-        //   svg{
-        //     width: 100%;
-        //     height: 100%;
-        //   }
-        // }
       }
-      &_back{
+      &_back {
         position: absolute;
-        width: 100%; 
+        width: 100%;
         height: 100%;
         transform: rotateY(180deg) translateZ(15px);
-        &_editor{
+        &_editor {
           position: absolute;
           width: 80%;
           height: 80%;
           top: 50%;
           left: 50%;
           transform: translateZ(15px) translate(-50%, -50%);
-          background-color: rgba(31,30,30,255);
+          background-color: rgba(31, 30, 30, 255);
           border-radius: 0.5rem;
-          &_form{
+          &_form {
             padding: 1.4rem 1rem;
             color: rgb(192, 135, 109);
             font-size: 1rem;
             overflow-x: hidden;
-            &_element{
+            &_element {
               display: flex;
               align-items: baseline;
-              &_textinput{
+              &_textinput {
                 padding-left: 0.5rem;
                 border: none;
                 background: none;
@@ -114,12 +93,12 @@
                 font-size: 1rem;
                 width: 100%;
               }
-              &_submit{
+              &_submit {
                 position: absolute;
                 bottom: 0;
                 left: 50%;
                 transform: translate(-50%, 22%) scale(0.45);
-                .front{
+                .front {
                   padding: 0.8rem 1.6rem;
                   font-size: 2.4rem;
                 }
@@ -130,6 +109,4 @@
       }
     }
   }
-  
 }
-   
