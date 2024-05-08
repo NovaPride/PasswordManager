@@ -46,15 +46,18 @@ function setImage(imgSrc, name, color, password){
             <span>}</span>
             <div class="card_back_editor_form_element">
               
-              <button data-card-edit-submit class="card_back_editor_form_element_submit pushable" type="submit" id="submit" name="submit">
-                <span class="shadow"></span>
-                <span class="edge"></span>
-                <span class="front">
-                  Save
-                </span>
-              </button>
+            <button data-card-edit-submit class="card_back_editor_form_element_submit pushable" type="submit" id="submit" name="submit">
+              <span class="shadow"></span>
+              <span class="edge"></span>
+              <span class="front">
+                Save
+              </span>
+            </button>
             </div>
           </form>
+          <div data-card-back-random class="card_back_editor_random">
+            Click me
+          </div>
         </div>`
         } else return ``;
       }())
@@ -91,6 +94,21 @@ export function addListenerToWrapper(db) {
         };
         await addToDB(newCard);
         location.reload();
+      }
+    } else if (target.dataset.cardBackRandom == '') {
+      target.innerText = "";
+      const chars = "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+      const passwordTextBox = target.parentElement.querySelector("#password");
+      const indexOfFistInsert = passwordTextBox.value.indexOf("%");
+      const indexOfSecondInsert = passwordTextBox.value.indexOf("%", indexOfFistInsert+1);
+      
+      for (let i = 0; i < 10; i++) {
+        let randomNumber = Math.floor(Math.random() * chars.length);
+        target.innerText += chars.substring(randomNumber, randomNumber +1);
+      }
+     
+      if(indexOfFistInsert != -1 && indexOfSecondInsert != -1){
+        passwordTextBox.value = `${passwordTextBox.value.slice(0, indexOfFistInsert)}%${target.innerText}%`;
       }
     }
   });
