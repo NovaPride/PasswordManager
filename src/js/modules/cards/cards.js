@@ -92,7 +92,9 @@ export function addListenerToWrapper(db) {
           color: "#FFFFFF",
           password: "tespass",
         };
+        root.classList.add("wait");
         await addToDB(newCard);
+        root.classList.remove("wait");
         location.reload();
       }
     } else if (target.dataset.cardBackRandom == '') {
@@ -180,11 +182,15 @@ export function addListenerToWrapper(db) {
 
     if (emptyCount === cardsAmount) {
       if (confirm(deleteConfirmMessage)) {
+        root.classList.add("wait");
         await removeFromDB(newCard, cardsIDs[cardID]);
+        root.classList.remove("wait");
         location.reload(); //это снести нахуй наверное потом
       }
     } else {
+      root.classList.add("wait");
       await updateInDB(newCard, cardsIDs[cardID]);
+      root.classList.remove("wait");
       location.reload(); //это снести нахуй наверное потом
     }
   });
