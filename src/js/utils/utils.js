@@ -1,3 +1,5 @@
+import { allowedName, allowedPassword } from "../constants/constants";
+
 export function $(selector) {
   return document.querySelector(`${selector}`);
 }
@@ -45,4 +47,27 @@ export function getRandomIntInclusive(min, max) {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+}
+
+function iHateRegExp(allowed, string){
+  for(const e of string.toLowerCase().split("")){
+    if(!allowed.includes(e)) {return false}
+  }
+  return true;
+}
+
+export function isName(string) {
+  return iHateRegExp(allowedName, string);
+}
+
+export function isColor(string) {
+  const hex = "abcdef0123456789";
+  if (string[0] != "#") return false;
+  string = string.slice(1);
+  if (string.length != 3 && string.length != 6) return false;
+  return iHateRegExp(hex, string);
+}
+
+export function isPassword(string) {
+  return iHateRegExp(allowedPassword, string);
 }

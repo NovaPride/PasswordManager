@@ -1,6 +1,6 @@
 import { ifCardGetCard, fCardRotate, fCardDefault, getLastAmountOfCards, setLastAmountOfCards} from '../../utils/utils';
 import { localImageStartPath, deleteConfirmMessage } from '../../constants/constants';
-import { $, isHaveClass, clog, cdir } from '../../utils/utils';
+import { $, isHaveClass, isName, isColor, isPassword, clog, cdir } from '../../utils/utils';
 import { addToDB, updateInDB, removeFromDB } from '../../async/async';
 
 let passwords = [];
@@ -172,24 +172,24 @@ export function addListenerToWrapper(db) {
     for (const { name, value } of Object.values(inputs)) {
       switch (name){
         case "name": {
-          const reg = /\w/gi;
-          //clog(reg.test(value));
-          break;
-        }
-        case "imgSrc": {
-          //clog(2);
+          if(!isName(value)){
+            console.error("Wrong name!");
+            return;
+          }
           break;
         }
         case "color": {
-          const hex = /#([a-f0-9]{6}|[a-f0-9]{3})\b/gi;
-          if (!hex.test(value)) {
+          if(!isColor(value)){
             console.error("Not a hex color!");
             return;
           }
           break;
         }
         case "password": {
-          //clog(4);
+          if(!isPassword(value)){
+            console.error("Password used forbidden symbols!");
+            return;
+          }
           break;
         }
         default: break;
