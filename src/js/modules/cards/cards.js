@@ -128,6 +128,7 @@ export function addListenerToWrapper(db) {
     return str.match(reg).join("");
   }
 
+  
   wrapper.addEventListener("contextmenu", (e) => {
     e.preventDefault();
     const cardFront = ifCardGetCard(e.target);
@@ -149,7 +150,6 @@ export function addListenerToWrapper(db) {
 
       createPlaceholderCard(dataID);
 
-      const reg = /[0-9]/g;
       const [red, green, blue] = card.style.backgroundColor
         .split(",")
         .map((e) => onlyInteger(e));
@@ -159,11 +159,6 @@ export function addListenerToWrapper(db) {
       navbar.classList.add("hide");
 
       isCardFullscreen = true;
-
-      // setTimeout(()=>{
-      //   wrapper.classList.remove("wrapper_swipe");
-      //   card.classList.remove("card_fullscreen");
-      // }, 2000)
     }
   });
 
@@ -175,6 +170,30 @@ export function addListenerToWrapper(db) {
     const cardID =
       e.target.parentElement.parentElement.parentElement.dataset.card; //bruh
     for (const { name, value } of Object.values(inputs)) {
+      switch (name){
+        case "name": {
+          const reg = /\w/gi;
+          //clog(reg.test(value));
+          break;
+        }
+        case "imgSrc": {
+          //clog(2);
+          break;
+        }
+        case "color": {
+          const hex = /#([a-f0-9]{6}|[a-f0-9]{3})\b/gi;
+          if (!hex.test(value)) {
+            console.error("Not a hex color!");
+            return;
+          }
+          break;
+        }
+        case "password": {
+          //clog(4);
+          break;
+        }
+        default: break;
+      }
       newCard[`${name}`] = value;
       if (!value) emptyCount++;
     }
