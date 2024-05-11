@@ -38,7 +38,6 @@ export async function updateInDB(card, id) {
   });
 }
 
-
 export async function removeFromDB(card, id) {
   await debugDelay();
   fetch(`${dbAdress}/${id}`, {
