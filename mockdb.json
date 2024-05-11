@@ -4,35 +4,35 @@
       "id": "dbe1",
       "name": "telegram",
       "imgSrc": "svg/telegram.svg",
-      "color": "#3D92BA",
+      "color": "#3d92ba",
       "password": "telegrampass"
     },
     {
       "id": "4b1d",
       "name": "google",
       "imgSrc": "svg/google.svg",
-      "color": "#FEFFFE",
+      "color": "#fefffe",
       "password": "googlepass"
     },
     {
       "id": "444a",
       "name": "steam",
       "imgSrc": "svg/steam.svg",
-      "color": "#144B7E",
+      "color": "#144b7e",
       "password": "steampass"
     },
     {
       "id": "5af0",
       "name": "priorbank",
       "imgSrc": "svg/priorbank.svg",
-      "color": "#FEF102",
+      "color": "#fef102",
       "password": "pri%QRoX1g3Qy1%"
     },
     {
       "id": "5be0",
       "name": "discord",
       "imgSrc": "svg/discord.svg",
-      "color": "#5865F2",
+      "color": "#5865f2",
       "password": "dis%t5Nv1gUDHP%"
     },
     {
@@ -67,14 +67,14 @@
       "id": "1fa3",
       "name": "facebook",
       "imgSrc": "svg/facebook.svg",
-      "color": "#2074F4",
+      "color": "#2074f4",
       "password": "facebookpass"
     },
     {
       "id": "b530",
       "name": "reddit",
       "imgSrc": "svg/reddit.svg",
-      "color": "#FF4500",
+      "color": "#ff4500",
       "password": "redditpass"
     }
   ]
