@@ -25,11 +25,11 @@ export function isHaveClass(target, string){
       .indexOf(string) > 0 ? true : false;
 }
 
-export function fCardRotate(e) { //чужой
+export function fCardRotate(e) {
   this.style.transform = `scale(1.1) perspective(1000px) rotatey(${(e.offsetX - this.offsetWidth / 2) / 6}deg) rotatex(${((e.offsetY - this.offsetHeight / 2) / 6) * -1}deg)`;
 };
 
-export function fCardDefault() { //чужой
+export function fCardDefault() {
   this.style.transform = ``;
 };
 
@@ -46,7 +46,12 @@ export function setLastAmountOfCards(amount){
 export function getRandomIntInclusive(min, max) {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
-  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+}
+
+export function onlyInteger(str) {
+  const reg = /[0-9]/g;
+  return str.match(reg).join("");
 }
 
 function iHateRegExp(allowed, string){
@@ -71,3 +76,4 @@ export function isColor(string) {
 export function isPassword(string) {
   return iHateRegExp(allowedPassword, string);
 }
+

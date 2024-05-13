@@ -1,79 +1,61 @@
 import { ifCardGetCard, fCardRotate, fCardDefault, getLastAmountOfCards, setLastAmountOfCards} from '../../utils/utils';
-import { localImageStartPath, deleteConfirmMessage } from '../../constants/constants';
-import { $, isHaveClass, isName, isColor, isPassword, clog, cdir } from '../../utils/utils';
+import { deleteConfirmMessage } from '../../constants/constants';
+import { $, onlyInteger, isName, isColor, isPassword} from '../../utils/utils';
 import { addToDB, updateInDB, removeFromDB } from '../../async/async';
+import { setImage } from './cards_layout';
 
 let passwords = [];
 let cardsIDs = {};
 let isCardFullscreen = false;
 
-function setImage(imgSrc, name, color, password){
-  return `
-    <div data-card-front class="card_front">` +
-      (function(){
-        if (imgSrc) {
-          const isLocal = imgSrc.slice(0, 3) === "img" || imgSrc.slice(0, 3) === "svg";
-          if(isLocal){
-            return `<img data-card-front-img src="${localImageStartPath}${imgSrc}" alt="${name}" class="card_front_img">`;
-          } else {
-            return  `<img data-card-front-img src="${imgSrc}" alt="${name}" class="card_front_img">`;
-          }
-        } else return ``;
-      }())
-    + `</div>
-    <div data-card-back class="card_back">` +
-      (function(){
-        if (name != "skeletLoad" && name != "newCard") {
-          return `<div data-card-back-editor class="card_back_editor">
-          <form data-card-back-form class="card_back_editor_form">
-            <span>{<br></span>
-            <div class="card_back_editor_form_element">
-              <label for="name">ㅤ"name":</label>
-              <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="name" name="name" value="${name}" spellcheck="false">
-            </div>
-            <div class="card_back_editor_form_element">
-              <label for="imgSrc">ㅤ"imgSrc":</label>
-              <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="imgSrc" name="imgSrc" value="${imgSrc}" spellcheck="false">
-            </div>
-            <div class="card_back_editor_form_element">
-              <label for="color">ㅤ"color":</label>
-              <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="color" name="color" value="${color}" spellcheck="false">
-            </div>
-            <div class="card_back_editor_form_element">
-              <label for="password">ㅤ"password":</label>
-              <input data-card-edit-textinput class="card_back_editor_form_element_textinput" type="text" id="password" name="password" value="${password}" spellcheck="false">
-            </div>
-            <span>}</span>
-            <div class="card_back_editor_form_element">
-              
-            <button data-card-edit-submit class="card_back_editor_form_element_submit pushable" type="submit" id="submit" name="submit">
-              <span class="shadow"></span>
-              <span class="edge"></span>
-              <span class="front">
-                Save
-              </span>
-            </button>
-            </div>
-          </form>
-          <div data-card-back-random class="card_back_editor_random">
-            Click me
-          </div>
-        </div>`
-        } else return ``;
-      }())
-      +`</div>`;
-};
+function createCard ({id, name, imgSrc, color, password} = e, wrapper, index){
+  const newCard = document.createElement("div");
+  newCard.setAttribute("data-card", index);
+  newCard.classList.add("card");
+  newCard.style.cssText = `background:${color}`;
+  if (name != "newCard"){
+    newCard.addEventListener("mousemove", fCardRotate);
+    newCard.addEventListener("mouseout", fCardDefault);
+  }
+  newCard.innerHTML = setImage(imgSrc, name, color, password);                                          
+  wrapper.appendChild(newCard);
+  passwords.push(password);
+  cardsIDs[`${index}`] = id;
+}
 
-
-export function addListenerToWrapper(db) {
+export function addListenersToWrapper() {
   const wrapper = $("[data-wrapper]");
   const navbar = $("[data-navbar]");
+
+  async function ifEmptyRemove (){
+    if (emptyCount === cardsAmount) {
+      if (confirm(deleteConfirmMessage)) {
+        root.classList.add("wait");
+        await removeFromDB(newCard, cardsIDs[cardID]);
+        root.classList.remove("wait");
+        location.reload(); 
+      }
+    } else {
+      root.classList.add("wait");
+      await updateInDB(newCard, cardsIDs[cardID]);
+      root.classList.remove("wait");
+      location.reload(); 
+    }
+  }
+
+  function createPlaceholderCard(elementID) {
+    const card = wrapper.querySelector(`[data-card="${elementID}"]`);
+    const newCard = document.createElement("div");
+    newCard.setAttribute("data-card", "placeholder");
+    newCard.classList.add("card");
+    card.insertAdjacentElement("afterend", newCard);
+  }
 
   wrapper.addEventListener("click", async ({ target } = e) => {
     let card = ifCardGetCard(target);
     if (card) {
       const cardID = card.parentElement.dataset.card;
-      const password = passwords[cardID]; //может пойти по пизде наверное
+      const password = passwords[cardID];
       if (password) {
         navigator.clipboard
           .writeText(password)
@@ -82,10 +64,9 @@ export function addListenerToWrapper(db) {
             audio.play();
           })
           .catch((err) => {
-            //console.log('Something went wrong', err);//сюда можно ошибку
+            console.log('Something went wrong', err);
           });
       } else if (cardID === "newCard") {
-        //сюда добавление новой карточки
         const newCard = {
           name: "test",
           imgSrc: "img/test.png",
@@ -115,25 +96,10 @@ export function addListenerToWrapper(db) {
     }
   });
 
-  function createPlaceholderCard(elementID) {
-    const card = wrapper.querySelector(`[data-card="${elementID}"]`);
-    const newCard = document.createElement("div");
-    newCard.setAttribute("data-card", "placeholder");
-    newCard.classList.add("card");
-    card.insertAdjacentElement("afterend", newCard);
-  }
-
-  function onlyInteger(str) {
-    const reg = /[0-9]/g;
-    return str.match(reg).join("");
-  }
-
-  
   wrapper.addEventListener("contextmenu", (e) => {
     e.preventDefault();
     const cardFront = ifCardGetCard(e.target);
     if (cardFront) {
-      //&& name != "newCard"
       const card = cardFront.parentElement;
       const dataID = card.dataset.card;
 
@@ -168,7 +134,24 @@ export function addListenerToWrapper(db) {
     const newCard = {};
     let emptyCount = 0;
     const cardID =
-      e.target.parentElement.parentElement.parentElement.dataset.card; //bruh
+      e.target.parentElement.parentElement.parentElement.dataset.card;
+    for (const { name, value } of Object.values(inputs)) {
+      
+      newCard[`${name}`] = value;
+      if (!value) emptyCount++;
+    }
+    const cardsAmount = Object.keys(newCard).length;
+
+   
+    if (emptyCount === cardsAmount) {
+      if (confirm(deleteConfirmMessage)) {
+        root.classList.add("wait");
+        await removeFromDB(newCard, cardsIDs[cardID]);
+        root.classList.remove("wait");
+        location.reload(); 
+      }
+    } 
+
     for (const { name, value } of Object.values(inputs)) {
       switch (name){
         case "name": {
@@ -194,44 +177,13 @@ export function addListenerToWrapper(db) {
         }
         default: break;
       }
-      newCard[`${name}`] = value;
-      if (!value) emptyCount++;
     }
-    const cardsAmount = Object.keys(newCard).length;
-
-    if (emptyCount === cardsAmount) {
-      if (confirm(deleteConfirmMessage)) {
-        root.classList.add("wait");
-        await removeFromDB(newCard, cardsIDs[cardID]);
-        root.classList.remove("wait");
-        location.reload(); //это снести нахуй наверное потом
-      }
-    } else {
-      root.classList.add("wait");
-      await updateInDB(newCard, cardsIDs[cardID]);
-      root.classList.remove("wait");
-      location.reload(); //это снести нахуй наверное потом
-    }
+    
+    root.classList.add("wait");
+    await updateInDB(newCard, cardsIDs[cardID]);
+    root.classList.remove("wait");
+    location.reload(); 
   });
-}
-
-
-
-
-function createCard ({id, name, imgSrc, color, password} = e, wrapper, index){
-  const newCard = document.createElement("div");
-  newCard.setAttribute("data-card", index);
-  newCard.classList.add("card");
-  newCard.style.cssText = `background:${color}`;
-  if (name != "newCard"){
-    //clog(id)
-    newCard.addEventListener("mousemove", fCardRotate);//чужой
-    newCard.addEventListener("mouseout", fCardDefault);//чужой
-  }
-  newCard.innerHTML = setImage(imgSrc, name, color, password);                                          
-  wrapper.appendChild(newCard);
-  passwords.push(password);//может пойти по пизде наверное
-  cardsIDs[`${index}`] = id;
 }
 
 export function skeletLoad(){
@@ -257,7 +209,6 @@ export function skeletLoad(){
     "newCard"
   );
 }
-
 
 export function renderCards(db, search){
   const wrapper = $("[data-wrapper]");

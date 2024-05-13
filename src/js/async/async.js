@@ -1,5 +1,5 @@
 import { dbAdress } from "../constants/constants";
-import { getRandomIntInclusive, clog } from "../utils/utils";
+import { getRandomIntInclusive} from "../utils/utils";
 import { setLastAmountOfCards, getLastAmountOfCards } from "../utils/utils";
 import { debugDelayMode } from "../constants/constants";
 
@@ -15,7 +15,7 @@ export async function getDB() {
     .then(data => data.json());
 }
 
-export async function addToDB(card) {//обработку http ошибок сделать
+export async function addToDB(card) {
   await debugDelay();
   fetch(dbAdress, {
     method: "POST",
@@ -24,7 +24,7 @@ export async function addToDB(card) {//обработку http ошибок сд
     },
     body: JSON.stringify(card)
   });
-  setLastAmountOfCards(+getLastAmountOfCards() + 1);//только при успешном запросе должно быть
+  setLastAmountOfCards(+getLastAmountOfCards() + 1);
 }
 
 export async function updateInDB(card, id) {
@@ -47,5 +47,5 @@ export async function removeFromDB(card, id) {
     },
     body: JSON.stringify(card)
   });
-  setLastAmountOfCards(+getLastAmountOfCards() - 1);//только при успешном запросе должно быть
+  setLastAmountOfCards(+getLastAmountOfCards() - 1);
 }

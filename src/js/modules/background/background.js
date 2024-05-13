@@ -1,5 +1,3 @@
-import { clog } from "../../utils/utils";
-
 export function backgroundChangeColor(){
   const currHour = new Date().getHours();
   document.documentElement.style.cssText = 

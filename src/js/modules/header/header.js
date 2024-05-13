@@ -1,7 +1,7 @@
-import { $, isHaveClass, clog, cdir } from '../../utils/utils';
-import { renderCards} from '../cards/cards';
+import { $, isHaveClass } from '../../utils/utils';
+import { renderCards } from '../cards/cards';
 
-function addListenersToHeader(db) {
+export function addListenersToHeader(db) {
   const searchbox = $("[data-searchbox]"),
         searchtext = $("[data-searchtext]");
 
@@ -29,7 +29,6 @@ function addListenersToHeader(db) {
     searchbox.classList.remove("searchbox_active");
     searchtext.value = "";
     searchtext.blur();
-    
   }
 
   function closeIfScroll() {
@@ -43,10 +42,12 @@ function addListenersToHeader(db) {
     window.addEventListener("scroll", callback);
   }
 
-  searchbox.addEventListener("focusin", () => headerTimer.stop());
+  searchbox.addEventListener("focusin", () => {
+    headerTimer.stop();
+  });
 
   searchbox.addEventListener("focusout", () => {
-    if (isEmpty()) headerTimer.start()
+    if (isEmpty()) headerTimer.start();
   });
 
   searchtext.addEventListener("keydown", () => {
@@ -67,5 +68,3 @@ function addListenersToHeader(db) {
     }
   });
 }
-
-export default addListenersToHeader;
