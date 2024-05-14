@@ -27,22 +27,6 @@ export function addListenersToWrapper() {
   const wrapper = $("[data-wrapper]");
   const navbar = $("[data-navbar]");
 
-  async function ifEmptyRemove (){
-    if (emptyCount === cardsAmount) {
-      if (confirm(deleteConfirmMessage)) {
-        root.classList.add("wait");
-        await removeFromDB(newCard, cardsIDs[cardID]);
-        root.classList.remove("wait");
-        location.reload(); 
-      }
-    } else {
-      root.classList.add("wait");
-      await updateInDB(newCard, cardsIDs[cardID]);
-      root.classList.remove("wait");
-      location.reload(); 
-    }
-  }
-
   function createPlaceholderCard(elementID) {
     const card = wrapper.querySelector(`[data-card="${elementID}"]`);
     const newCard = document.createElement("div");
